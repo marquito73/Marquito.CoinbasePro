@@ -97,8 +97,6 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
             return encodedToken;
         }
 
-
-
         protected bool IsTokenValid(string token)
         {
             string tokenId = $"organizations/{OrganizationName}/apiKeys/{ApiKey}";
@@ -166,6 +164,11 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
                 .WithOAuthBearerToken(GenerateToken(resource));
 
             return request.GetJsonAsync<Account>().Result;
+        }
+
+        public override Account? GetAccount(string productCurrency)
+        {
+            return this.GetAccounts().Where(x => x.Currency == productCurrency).FirstOrDefault();
         }
 
         #endregion Accounts
@@ -263,7 +266,33 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
             Account fromAccount = accounts.Where(x => x.Currency == productID.Split('-')[0]).First();
             Account targetAccount = accounts.Where(x => x.Currency == productID.Split('-')[1]).First();
 
-            return ConvertCrypto(fromAccount, targetAccount, amountToConvert, side);
+            return this.ConvertCrypto(fromAccount, targetAccount, amountToConvert, side);
+        }
+
+        public override Order ConvertAllCrypto(Account fromAccount, Account targetAccount, TradingSide side)
+        {
+            double amount;
+
+            if (side == TradingSide.SELL)
+            {
+                amount = fromAccount.AccountBalance.Value;
+            }
+            else
+            {
+                amount = targetAccount.AccountBalance.Value;
+            }
+
+            return this.ConvertCrypto(fromAccount, targetAccount, amount, side);
+        }
+
+        public override Order ConvertAllCrypto(string productID, TradingSide side)
+        {
+            List<Account> accounts = GetAccounts();
+
+            Account fromAccount = accounts.Where(x => x.Currency == productID.Split('-')[0]).First();
+            Account targetAccount = accounts.Where(x => x.Currency == productID.Split('-')[1]).First();
+
+            return this.ConvertAllCrypto(fromAccount, targetAccount, side);
         }
 
         #endregion Orders

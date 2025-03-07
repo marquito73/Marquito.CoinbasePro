@@ -70,6 +70,8 @@ namespace Marquito.CoinbasePro.Class.Client
         /// <returns>An account by it's ID</returns>
         public abstract Account GetAccount(Guid accountID);
 
+        public abstract Account? GetAccount(string productCurrency);
+
         #endregion Accounts
 
         #region Products
@@ -130,6 +132,10 @@ namespace Marquito.CoinbasePro.Class.Client
         /// <returns></returns>
         /// <exception cref="NoFundsAvailableException">An account don't have enough funds to convert an amount of crypto.</exception>
         public abstract Order ConvertCrypto(string productID, double amountToConvert, TradingSide side);
+
+        public abstract Order ConvertAllCrypto(Account fromAccount, Account targetAccount, TradingSide side);
+
+        public abstract Order ConvertAllCrypto(string productID, TradingSide side);
 
         #endregion Orders
 
