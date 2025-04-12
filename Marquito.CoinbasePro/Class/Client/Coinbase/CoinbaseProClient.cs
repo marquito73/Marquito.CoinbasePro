@@ -226,8 +226,13 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
 
         #region Orders
 
-        public override Order ConvertCrypto(Account fromAccount, Account targetAccount, double amountToConvert, TradingSide side)
+        public void CanBuyOrSell(Account fromAccount, Account targetAccount, double amountToConvert, TradingSide side)
         {
+            AccountPermissions accountPermissions = this.GetAccountPermissions();
+            if (!accountPermissions.CanTrade)
+            {
+                throw new ApiKeyTradeRightException(accountPermissions);
+            }
             if (side == TradingSide.SELL && fromAccount.AccountBalance.Value < amountToConvert)
             {
                 throw new NoFundsAvailableException(fromAccount, $"{fromAccount.Currency}-{targetAccount.Currency}", side);
@@ -236,6 +241,11 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
             {
                 throw new NoFundsAvailableException(targetAccount, $"{fromAccount.Currency}-{targetAccount.Currency}", side);
             }
+        }
+
+        public override Order ConvertCrypto(Account fromAccount, Account targetAccount, double amountToConvert, TradingSide side)
+        {
+            this.CanBuyOrSell(fromAccount, targetAccount, amountToConvert, side);
 
             string resource = "orders";
 

@@ -19,7 +19,7 @@ namespace Marquito.CoinbasePro.Class.Exceptions
         {
             this.Data.Add("AccountID", account.AccountID);
             this.Data.Add("ProductID", productID);
-            this.Data.Add("TradingSide", side);
+            this.Data.Add(nameof(TradingSide), side);
         }
     }
 }
