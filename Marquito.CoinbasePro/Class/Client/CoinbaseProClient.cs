@@ -4,32 +4,20 @@ using Marquito.CoinbasePro.Class.Client.Data.Account;
 using Marquito.CoinbasePro.Class.Client.Data.Order;
 using Marquito.CoinbasePro.Class.Client.Data.Permissions;
 using Marquito.CoinbasePro.Class.Client.Data.Product;
-using Marquito.CoinbasePro.Class.Entities.File;
-using Marquito.CoinbasePro.Class.Enums;
 using Marquito.CoinbasePro.Class.Enums.Extensions;
 using Marquito.CoinbasePro.Class.Exceptions;
 using MarquitoUtils.Main.Class.Enums.Http;
+using MarquitoUtils.TradingAPI.Class.Client;
+using MarquitoUtils.TradingAPI.Class.Entities.File;
+using MarquitoUtils.TradingAPI.Class.Enums;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 
-namespace Marquito.CoinbasePro.Class.Client.Coinbase
+namespace Marquito.CoinbasePro.Class.Client
 {
     public class CoinbaseProClient : TradingClient
     {
-        /// <summary>
-        /// The secret key
-        /// </summary>
-        protected string SecretKey { get; set; }
-        /// <summary>
-        /// The organization name
-        /// </summary>
-        protected string OrganizationName { get; set; }
-        /// <summary>
-        /// The api key
-        /// </summary>
-        protected string ApiKey { get; set; }
-
         /// <summary>
         /// Coinbase trading client
         /// </summary>
@@ -37,6 +25,7 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
         /// <param name="organizationName">The organization name</param>
         /// <param name="apiKey">The token</param>
         public CoinbaseProClient(string secretKey, string organizationName, string apiKey)
+            : base(secretKey, organizationName, apiKey)
         {
             Endpoint = "api.coinbase.com/api/v3/brokerage";
             SecretKey = secretKey;
@@ -49,7 +38,7 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
         /// </summary>
         /// <param name="tradingConfiguration">The trading configuration</param>
         public CoinbaseProClient(TradingConfiguration tradingConfiguration)
-            : this(tradingConfiguration.SecretKey, tradingConfiguration.OrganizationName, tradingConfiguration.ApiKey)
+            : base(tradingConfiguration.SecretKey, tradingConfiguration.OrganizationName, tradingConfiguration.ApiKey)
         {
 
         }
@@ -143,7 +132,11 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
 
         #region Accounts
 
-        public override List<Account> GetAccounts()
+        /// <summary>
+        /// Get accounts
+        /// </summary>
+        /// <returns>The list of accounts available</returns>
+        public List<Account> GetAccounts()
         {
             string resource = $"accounts";
 
@@ -154,7 +147,12 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
             return request.GetJsonAsync<AccountResponse>().Result.Accounts.Where(x => x.AccountBalance.Value > 0).ToList();
         }
 
-        public override Account GetAccount(Guid accountID)
+        /// <summary>
+        /// Get an account by it's ID
+        /// </summary>
+        /// <param name="accountID">The account's ID</param>
+        /// <returns>An account by it's ID</returns>
+        public Account GetAccount(Guid accountID)
         {
             string resource = $"accounts";
 
@@ -166,16 +164,25 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
             return request.GetJsonAsync<Account>().Result;
         }
 
-        public override Account? GetAccount(string productCurrency)
+        /// <summary>
+        /// Get an account by it's product currency
+        /// </summary>
+        /// <param name="productCurrency">The product currency</param>
+        /// <returns>An account by it's product currency</returns>
+        public Account? GetAccount(string productCurrency)
         {
-            return this.GetAccounts().Where(x => x.Currency == productCurrency).FirstOrDefault();
+            return GetAccounts().Where(x => x.Currency == productCurrency).FirstOrDefault();
         }
 
         #endregion Accounts
 
         #region Products
 
-        public override List<TradingProduct> GetProducts()
+        /// <summary>
+        /// Get list of products
+        /// </summary>
+        /// <returns>Products</returns>
+        public List<TradingProduct> GetProducts()
         {
             string resource = $"products";
 
@@ -186,7 +193,15 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
             return request.GetJsonAsync<TradingProductResponse>().Result.Products;
         }
 
-        public override List<Candle> GetCandles(string product, DateTime start, DateTime end, TradingPeriod period)
+        /// <summary>
+        /// Get candle data (historical data) for a specific product
+        /// </summary>
+        /// <param name="product">The product</param>
+        /// <param name="start">The start date</param>
+        /// <param name="end">The end date</param>
+        /// <param name="period">The period</param>
+        /// <returns>Candle data (historical data) for a specific product</returns>
+        public List<Candle> GetCandles(string product, DateTime start, DateTime end, TradingPeriod period)
         {
             string resource = $"products/{product}/candles";
 
@@ -201,7 +216,14 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
                 .OrderBy(x => x.Start).ToList();
         }
 
-        public override List<Candle> GetCandles(string product, TradingPeriod period, short candleCount = 300)
+        /// <summary>
+        /// Get candle data (historical data) for a specific product
+        /// </summary>
+        /// <param name="product">The product</param>
+        /// <param name="period">The period</param>
+        /// <param name="candleCount">The amount of candle (max 300 candles per request)</param>
+        /// <returns>Candle data (historical data) for a specific product</returns>
+        public List<Candle> GetCandles(string product, TradingPeriod period, short candleCount = 300)
         {
             DateTime now = DateTime.Now;
 
@@ -210,7 +232,12 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
             return GetCandles(product, now.AddSeconds(seconds * -1), now, period);
         }
 
-        public override MarketTrade GetLastMarketTrade(string product)
+        /// <summary>
+        /// Get last market trade price for a specific product
+        /// </summary>
+        /// <param name="product">The product</param>
+        /// <returns>The last market trade price for a specific product</returns>
+        public virtual MarketTrade GetLastMarketTrade(string product)
         {
             string resource = $"products/{product}/ticker";
 
@@ -226,9 +253,18 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
 
         #region Orders
 
+        /// <summary>
+        /// Buy or sell crypto between two currencies of a product
+        /// </summary>
+        /// <param name="fromAccount">The first part of the product</param>
+        /// <param name="targetAccount">The second part of the product</param>
+        /// <param name="amountToConvert">The amount to convert between the pair</param>
+        /// <param name="side">The side : we want to buy or sell ?</param>
+        /// <returns></returns>
+        /// <exception cref="NoFundsAvailableException">An account don't have enough funds to convert an amount of crypto.</exception>
         public void CanBuyOrSell(Account fromAccount, Account targetAccount, double amountToConvert, TradingSide side)
         {
-            AccountPermissions accountPermissions = this.GetAccountPermissions();
+            AccountPermissions accountPermissions = GetAccountPermissions();
             if (!accountPermissions.CanTrade)
             {
                 throw new ApiKeyTradeRightException(accountPermissions);
@@ -243,15 +279,23 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
             }
         }
 
-        public override Order ConvertCrypto(Account fromAccount, Account targetAccount, double amountToConvert, TradingSide side)
+        /// <summary>
+        /// Buy or sell crypto between two currencies of a product
+        /// </summary>
+        /// <param name="productID">The product pair</param>
+        /// <param name="amountToConvert">The amount to convert between the pair</param>
+        /// <param name="side">The side : we want to buy or sell ?</param>
+        /// <returns></returns>
+        /// <exception cref="NoFundsAvailableException">An account don't have enough funds to convert an amount of crypto.</exception>
+        public Order ConvertCrypto(Account fromAccount, Account targetAccount, double amountToConvert, TradingSide side)
         {
-            this.CanBuyOrSell(fromAccount, targetAccount, amountToConvert, side);
+            CanBuyOrSell(fromAccount, targetAccount, amountToConvert, side);
 
             string resource = "orders";
 
             IFlurlRequest request = GetMainUrl()
                 .AppendPathSegment(resource)
-                .WithOAuthBearerToken(this.GenerateToken(resource, HttpMethodType.POST));
+                .WithOAuthBearerToken(GenerateToken(resource, HttpMethodType.POST));
 
             return request.PostJsonAsync(
                 new
@@ -269,17 +313,17 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
                 }).ReceiveJson<OrderResponse>().Result.Order;
         }
 
-        public override Order ConvertCrypto(string productID, double amountToConvert, TradingSide side)
+        public Order ConvertCrypto(string productID, double amountToConvert, TradingSide side)
         {
             List<Account> accounts = GetAccounts();
 
             Account fromAccount = accounts.Where(x => x.Currency == productID.Split('-')[0]).First();
             Account targetAccount = accounts.Where(x => x.Currency == productID.Split('-')[1]).First();
 
-            return this.ConvertCrypto(fromAccount, targetAccount, amountToConvert, side);
+            return ConvertCrypto(fromAccount, targetAccount, amountToConvert, side);
         }
 
-        public override Order ConvertAllCrypto(Account fromAccount, Account targetAccount, TradingSide side)
+        public Order ConvertAllCrypto(Account fromAccount, Account targetAccount, TradingSide side)
         {
             double amount;
 
@@ -292,24 +336,28 @@ namespace Marquito.CoinbasePro.Class.Client.Coinbase
                 amount = targetAccount.AccountBalance.Value;
             }
 
-            return this.ConvertCrypto(fromAccount, targetAccount, amount, side);
+            return ConvertCrypto(fromAccount, targetAccount, amount, side);
         }
 
-        public override Order ConvertAllCrypto(string productID, TradingSide side)
+        public Order ConvertAllCrypto(string productID, TradingSide side)
         {
             List<Account> accounts = GetAccounts();
 
             Account fromAccount = accounts.Where(x => x.Currency == productID.Split('-')[0]).First();
             Account targetAccount = accounts.Where(x => x.Currency == productID.Split('-')[1]).First();
 
-            return this.ConvertAllCrypto(fromAccount, targetAccount, side);
+            return ConvertAllCrypto(fromAccount, targetAccount, side);
         }
 
         #endregion Orders
 
         #region Permissions
 
-        public override AccountPermissions GetAccountPermissions()
+        /// <summary>
+        /// Get permissions for your API key
+        /// </summary>
+        /// <returns>Permissions for your API key</returns>
+        public virtual AccountPermissions GetAccountPermissions()
         {
             string resource = "key_permissions";
 

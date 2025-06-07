@@ -1,4 +1,6 @@
-﻿namespace Marquito.CoinbasePro.Class.Enums.Extensions
+﻿using MarquitoUtils.TradingAPI.Class.Enums;
+
+namespace Marquito.CoinbasePro.Class.Enums.Extensions
 {
     public static class TradingPeriodExtensions
     {

@@ -1,5 +1,5 @@
 ﻿using Marquito.CoinbasePro.Class.Client.Data.Account;
-using Marquito.CoinbasePro.Class.Enums;
+using MarquitoUtils.TradingAPI.Class.Enums;
 
 namespace Marquito.CoinbasePro.Class.Exceptions
 {

@@ -22,6 +22,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\MarquitoUtils.Main\MarquitoUtils.Main\MarquitoUtils.Main.csproj" />
+    <ProjectReference Include="..\..\MarquitoUtils.TradingAPI\MarquitoUtils.TradingAPI\MarquitoUtils.TradingAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Class\Entities\" />
   </ItemGroup>
 
 </Project>
