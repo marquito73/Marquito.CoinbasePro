@@ -7,6 +7,7 @@ using Marquito.CoinbasePro.Class.Client.Data.Product;
 using Marquito.CoinbasePro.Class.Enums.Extensions;
 using Marquito.CoinbasePro.Class.Exceptions;
 using MarquitoUtils.Main.Class.Enums.Http;
+using MarquitoUtils.Main.Class.Tools;
 using MarquitoUtils.TradingAPI.Class.Client;
 using MarquitoUtils.TradingAPI.Class.Entities.File;
 using MarquitoUtils.TradingAPI.Class.Enums;
@@ -171,7 +172,28 @@ namespace Marquito.CoinbasePro.Class.Client
         /// <returns>An account by it's product currency</returns>
         public Account? GetAccount(string productCurrency)
         {
-            return GetAccounts().Where(x => x.Currency == productCurrency).FirstOrDefault();
+            return this.RetrieveAccountWithCurrency(GetAccounts(), productCurrency);
+        }
+
+        private Account RetrieveAccountWithCurrency(List<Account> accounts, string productCurrency)
+        {
+            return accounts.Where(x => x.Currency == productCurrency).FirstOrDefault(new Account()
+            {
+                IsFakeAccount = true,
+                AccountID = Guid.Empty,
+                Name = $"{productCurrency} fake wallet",
+                Currency = productCurrency,
+                AccountBalance = new Data.Common.Balance()
+                {
+                    Value = 0,
+                    Currency = productCurrency,
+                },
+                HoldBalance = new Data.Common.Balance()
+                {
+                    Value = 0,
+                    Currency = productCurrency,
+                },
+            });
         }
 
         #endregion Accounts
@@ -297,7 +319,7 @@ namespace Marquito.CoinbasePro.Class.Client
                 .AppendPathSegment(resource)
                 .WithOAuthBearerToken(GenerateToken(resource, HttpMethodType.POST));
 
-            return request.PostJsonAsync(
+            Order order = request.PostJsonAsync(
                 new
                 {
                     client_order_id = Guid.NewGuid().ToString(),
@@ -311,27 +333,34 @@ namespace Marquito.CoinbasePro.Class.Client
                         }
                     },
                 }).ReceiveJson<OrderResponse>().Result.Order;
+
+            if (Utils.IsNull(order))
+            {
+                throw new CoinbaseProOrderException($"{fromAccount.Currency}-{targetAccount.Currency}", side);
+            }
+
+            return order;
         }
 
         public Order ConvertCrypto(string productID, double amountToConvert, TradingSide side)
         {
             List<Account> accounts = GetAccounts();
 
-            Account fromAccount = accounts.Where(x => x.Currency == productID.Split('-')[0]).First();
-            Account targetAccount = accounts.Where(x => x.Currency == productID.Split('-')[1]).First();
+            Account fromAccount = this.RetrieveAccountWithCurrency(accounts, productID.Split('-')[0]);
+            Account targetAccount = this.RetrieveAccountWithCurrency(accounts, productID.Split('-')[1]);
 
             return ConvertCrypto(fromAccount, targetAccount, amountToConvert, side);
         }
 
         public Order ConvertAllCrypto(Account fromAccount, Account targetAccount, TradingSide side)
         {
-            double amount;
+            double amount = 0;
 
-            if (side == TradingSide.SELL)
+            if (side == TradingSide.SELL && fromAccount != null)
             {
                 amount = fromAccount.AccountBalance.Value;
             }
-            else
+            else if (side == TradingSide.BUY && targetAccount != null)
             {
                 amount = targetAccount.AccountBalance.Value;
             }
@@ -343,8 +372,8 @@ namespace Marquito.CoinbasePro.Class.Client
         {
             List<Account> accounts = GetAccounts();
 
-            Account fromAccount = accounts.Where(x => x.Currency == productID.Split('-')[0]).First();
-            Account targetAccount = accounts.Where(x => x.Currency == productID.Split('-')[1]).First();
+            Account fromAccount = this.RetrieveAccountWithCurrency(accounts, productID.Split('-')[0]);
+            Account targetAccount = this.RetrieveAccountWithCurrency(accounts, productID.Split('-')[1]);
 
             return ConvertAllCrypto(fromAccount, targetAccount, side);
         }

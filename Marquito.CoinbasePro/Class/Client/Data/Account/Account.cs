@@ -23,5 +23,7 @@ namespace Marquito.CoinbasePro.Class.Client.Data.Account
         public Balance HoldBalance { get; set; }
         [JsonProperty("retail_portfolio_id")]
         public string RetailPortfolioId { get; set; }
+        [JsonIgnore]
+        public bool IsFakeAccount { get; set; }
     }
 }
