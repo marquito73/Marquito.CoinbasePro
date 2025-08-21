@@ -16,5 +16,7 @@ namespace Marquito.CoinbasePro.Class.Client.Data.Product
         public string CurrencyID { get; set; }
         [JsonProperty("quote_name")]
         public string CurrencyName { get; set; }
+        [JsonProperty("base_increment")]
+        public double BaseIncrement { get; set; }
     }
 }
