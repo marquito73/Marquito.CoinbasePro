@@ -7,11 +7,11 @@ using Marquito.CoinbasePro.Class.Client.Data.Product;
 using Marquito.CoinbasePro.Class.Enums.Extensions;
 using Marquito.CoinbasePro.Class.Exceptions;
 using MarquitoUtils.Main.Class.Enums.Http;
-using MarquitoUtils.Main.Class.Tools;
 using MarquitoUtils.TradingAPI.Class.Client;
 using MarquitoUtils.TradingAPI.Class.Entities.File;
 using MarquitoUtils.TradingAPI.Class.Enums;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 
@@ -206,13 +206,44 @@ namespace Marquito.CoinbasePro.Class.Client
         /// <returns>Products</returns>
         public List<TradingProduct> GetProducts()
         {
-            string resource = $"products";
+            string resource = "products";
 
             IFlurlRequest request = GetMainUrl()
                 .AppendPathSegment(resource)
                 .WithOAuthBearerToken(GenerateToken(resource));
 
             return request.GetJsonAsync<TradingProductResponse>().Result.Products;
+        }
+
+        /// <summary>
+        /// Get list of products
+        /// </summary>
+        /// <returns>Products</returns>
+        public List<TradingProduct> GetProducts(List<string> products)
+        {
+            string resource = "products";
+
+            IFlurlRequest request = GetMainUrl()
+                .AppendPathSegment(resource)
+                .SetQueryParam("product_ids", products)
+                .WithOAuthBearerToken(GenerateToken(resource));
+
+            return request.GetJsonAsync<TradingProductResponse>().Result.Products;
+        }
+
+        /// <summary>
+        /// Get product
+        /// </summary>
+        /// <returns>Product</returns>
+        public TradingProduct GetProduct(string product)
+        {
+            string resource = $"products/{product}";
+
+            IFlurlRequest request = GetMainUrl()
+                .AppendPathSegment(resource)
+                .WithOAuthBearerToken(GenerateToken(resource));
+
+            return request.GetJsonAsync<TradingProduct>().Result;
         }
 
         /// <summary>
@@ -311,15 +342,23 @@ namespace Marquito.CoinbasePro.Class.Client
         /// <exception cref="NoFundsAvailableException">An account don't have enough funds to convert an amount of crypto.</exception>
         public Order ConvertCrypto(Account fromAccount, Account targetAccount, double amountToConvert, TradingSide side)
         {
+            // TODO Add buy / sell to user watch for more security
+
+            // Check if the user has the right to trade, and if the accounts have enough funds to convert the amount
             CanBuyOrSell(fromAccount, targetAccount, amountToConvert, side);
+            // Get trading product used to convert crypto
+            TradingProduct tradingProduct = this.GetProduct($"{fromAccount.Currency}-{targetAccount.Currency}");
+            // Get the correct amount, rounded down by base size, to convert based on the base increment of the trading product
+            double amountBaseSized = Math.Floor(amountToConvert / tradingProduct.BaseIncrement) * tradingProduct.BaseIncrement;
 
             string resource = "orders";
 
+            // Create the request to convert crypto
             IFlurlRequest request = GetMainUrl()
                 .AppendPathSegment(resource)
                 .WithOAuthBearerToken(GenerateToken(resource, HttpMethodType.POST));
-
-            Order order = request.PostJsonAsync(
+            // Get the response from the request
+            OrderResponse orderResponse = request.PostJsonAsync(
                 new
                 {
                     client_order_id = Guid.NewGuid().ToString(),
@@ -329,17 +368,21 @@ namespace Marquito.CoinbasePro.Class.Client
                     {
                         market_market_ioc = new
                         {
-                            base_size = amountToConvert.ToString()
+                            base_size = amountBaseSized.ToString(CultureInfo.InvariantCulture),
                         }
                     },
-                }).ReceiveJson<OrderResponse>().Result.Order;
+                }).ReceiveJson<OrderResponse>().Result;
 
-            if (Utils.IsNull(order))
+            if (!orderResponse.IsSuccess)
             {
-                throw new CoinbaseProOrderException($"{fromAccount.Currency}-{targetAccount.Currency}", side);
+                // Order failed, throw an exception with the error details
+                throw new CoinbaseProOrderException($"{fromAccount.Currency}-{targetAccount.Currency}", side, orderResponse.Error);
             }
-
-            return order;
+            else
+            {
+                // Order succeeded, return the order
+                return orderResponse.Order;
+            }
         }
 
         public Order ConvertCrypto(string productID, double amountToConvert, TradingSide side)

@@ -8,6 +8,8 @@ namespace Marquito.CoinbasePro.Class.Client.Data.Product
     {
         [JsonProperty("product_id")]
         public string ProductID { get; set; }
+        [JsonProperty("price")]
+        public double Price { get; set; }
         [JsonProperty("base_currency_id")]
         public string CryptoID { get; set; }
         [JsonProperty("base_name")]
@@ -18,5 +20,15 @@ namespace Marquito.CoinbasePro.Class.Client.Data.Product
         public string CurrencyName { get; set; }
         [JsonProperty("base_increment")]
         public double BaseIncrement { get; set; }
+
+        public string GetCryptoPart()
+        {
+            return this.ProductID.Split("-")[0];
+        }
+
+        public string GetFiatPart()
+        {
+            return this.ProductID.Split("-")[1];
+        }
     }
 }
