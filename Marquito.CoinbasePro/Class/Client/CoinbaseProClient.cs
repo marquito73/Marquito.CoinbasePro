@@ -7,6 +7,7 @@ using Marquito.CoinbasePro.Class.Client.Data.Product;
 using Marquito.CoinbasePro.Class.Enums.Extensions;
 using Marquito.CoinbasePro.Class.Exceptions;
 using MarquitoUtils.Main.Class.Enums.Http;
+using MarquitoUtils.Main.Class.Tools;
 using MarquitoUtils.TradingAPI.Class.Client;
 using MarquitoUtils.TradingAPI.Class.Entities.File;
 using MarquitoUtils.TradingAPI.Class.Enums;
@@ -349,7 +350,7 @@ namespace Marquito.CoinbasePro.Class.Client
             // Get trading product used to convert crypto
             TradingProduct tradingProduct = this.GetProduct($"{fromAccount.Currency}-{targetAccount.Currency}");
             // Get the correct amount, rounded down by base size, to convert based on the base increment of the trading product
-            double amountBaseSized = Math.Floor(amountToConvert / tradingProduct.BaseIncrement) * tradingProduct.BaseIncrement;
+            double amountBaseSized = CurrencyUtils.GetBaseSizedAmount(amountToConvert, tradingProduct.BaseIncrement);
 
             string resource = "orders";
 
