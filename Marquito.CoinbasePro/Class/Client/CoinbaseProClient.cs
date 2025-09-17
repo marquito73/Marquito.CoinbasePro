@@ -345,14 +345,34 @@ namespace Marquito.CoinbasePro.Class.Client
         {
             // TODO Add buy / sell to user watch for more security
 
+            string resource = "orders";
+
             // Check if the user has the right to trade, and if the accounts have enough funds to convert the amount
             CanBuyOrSell(fromAccount, targetAccount, amountToConvert, side);
             // Get trading product used to convert crypto
             TradingProduct tradingProduct = this.GetProduct($"{fromAccount.Currency}-{targetAccount.Currency}");
             // Get the correct amount, rounded down by base size, to convert based on the base increment of the trading product
-            double amountBaseSized = CurrencyUtils.GetBaseSizedAmount(amountToConvert, tradingProduct.BaseIncrement);
-
-            string resource = "orders";
+            double amountBaseSized;
+            // Construct market ioc
+            object marketIoc;
+            if (side == TradingSide.SELL)
+            {
+                amountBaseSized = CurrencyUtils.GetSizedAmount(amountToConvert, tradingProduct.BaseIncrement);
+                // Sell side
+                marketIoc = new
+                {
+                    base_size = amountBaseSized.ToString(CultureInfo.InvariantCulture),
+                };
+            }
+            else
+            {
+                amountBaseSized = CurrencyUtils.GetSizedAmount(amountToConvert, tradingProduct.QuoteIncrement);
+                // Buy side
+                marketIoc = new
+                {
+                    quote_size = amountBaseSized.ToString(CultureInfo.InvariantCulture),
+                };
+            }
 
             // Create the request to convert crypto
             IFlurlRequest request = GetMainUrl()
@@ -367,10 +387,7 @@ namespace Marquito.CoinbasePro.Class.Client
                     side = side.ToString(),
                     order_configuration = new
                     {
-                        market_market_ioc = new
-                        {
-                            base_size = amountBaseSized.ToString(CultureInfo.InvariantCulture),
-                        }
+                        market_market_ioc = marketIoc,
                     },
                 }).ReceiveJson<OrderResponse>().Result;
 
