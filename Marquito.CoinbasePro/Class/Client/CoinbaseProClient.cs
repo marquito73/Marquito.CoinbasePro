@@ -305,6 +305,38 @@ namespace Marquito.CoinbasePro.Class.Client
 
         #endregion Products
 
+        #region Price conversions
+
+        public double GetConvertedPrice(TradingProduct product, string fiatProductID, double valueToConvert)
+        {
+            return this.GetConvertedPrice(product.ProductID, fiatProductID, valueToConvert);
+        }
+
+        public double GetConvertedPrice(string productID, string fiatProductID, double valueToConvert)
+        {
+            string[] fiats = fiatProductID.Split("-");
+
+            TradingProduct fiatProduct;
+            if (productID.Contains(fiats[0]))
+            {
+                // Example : productID = BTC-USD, fiatProduct = USD-EUR
+                // We convert from crypto to fiat
+                fiatProduct = this.GetProduct($"{productID.Split("-")[1]}-{fiats[1]}");
+
+                return (double)((decimal)valueToConvert * (decimal)fiatProduct.Price.Value);
+            }
+            else
+            {
+                // Example : productID = BTC-USD, fiatProduct = EUR-USD
+                // We convert from fiat to crypto
+                fiatProduct = this.GetProduct($"{productID.Split("-")[1]}-{fiats[0]}");
+
+                return (double)((decimal)valueToConvert / (decimal)fiatProduct.Price.Value);
+            }
+        }
+
+        #endregion Price conversions
+
         #region Orders
 
         /// <summary>
