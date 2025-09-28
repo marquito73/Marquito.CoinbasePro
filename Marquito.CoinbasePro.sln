@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarquitoUtils.Main", "..\Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marquito.CoinbasePro.Tests", "Marquito.CoinbasePro.Tests\Marquito.CoinbasePro.Tests.csproj", "{A62E784F-490A-43D9-BB28-2358552819DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarquitoUtils.TradingAPI", "..\MarquitoUtils.TradingAPI\MarquitoUtils.TradingAPI\MarquitoUtils.TradingAPI.csproj", "{EE4C57F2-902A-985B-A013-991E3646C1E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{A62E784F-490A-43D9-BB28-2358552819DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A62E784F-490A-43D9-BB28-2358552819DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A62E784F-490A-43D9-BB28-2358552819DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE4C57F2-902A-985B-A013-991E3646C1E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE4C57F2-902A-985B-A013-991E3646C1E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE4C57F2-902A-985B-A013-991E3646C1E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE4C57F2-902A-985B-A013-991E3646C1E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

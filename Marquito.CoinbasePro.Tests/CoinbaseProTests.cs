@@ -1,10 +1,11 @@
-using Marquito.CoinbasePro.Class.Client.Coinbase;
+using Marquito.CoinbasePro.Class.Client;
 using Marquito.CoinbasePro.Class.Client.Data.Account;
 using Marquito.CoinbasePro.Class.Client.Data.Common;
 using Marquito.CoinbasePro.Class.Client.Data.Permissions;
-using Marquito.CoinbasePro.Class.Entities.File;
 using Marquito.CoinbasePro.Class.Exceptions;
 using Marquito.CoinbasePro.Tests.Enums;
+using MarquitoUtils.TradingAPI.Class.Entities.File;
+using MarquitoUtils.TradingAPI.Class.Enums;
 using Moq;
 
 namespace Marquito.CoinbasePro.Tests
@@ -58,7 +59,7 @@ namespace Marquito.CoinbasePro.Tests
                     fiatAccount = this.GetEmptyAccount(false);
                     Assert.Throws<NoFundsAvailableException>(() =>
                     {
-                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, Class.Enums.TradingSide.SELL);
+                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, TradingSide.SELL);
                     });
                     break;
                 case TradingAccountTestCase.SellWithFundedAccount:
@@ -67,7 +68,7 @@ namespace Marquito.CoinbasePro.Tests
 
                     try
                     {
-                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, Class.Enums.TradingSide.SELL);
+                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, TradingSide.SELL);
 
                         Assert.True(true);
                     }
@@ -81,7 +82,7 @@ namespace Marquito.CoinbasePro.Tests
                     fiatAccount = this.GetEmptyAccount(false);
                     Assert.Throws<NoFundsAvailableException>(() =>
                     {
-                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, Class.Enums.TradingSide.SELL);
+                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, TradingSide.SELL);
                     });
                     break;
                 case TradingAccountTestCase.BuyWithEmptyAccount:
@@ -89,7 +90,7 @@ namespace Marquito.CoinbasePro.Tests
                     fiatAccount = this.GetEmptyAccount(false);
                     Assert.Throws<NoFundsAvailableException>(() =>
                     {
-                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, Class.Enums.TradingSide.BUY);
+                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, TradingSide.BUY);
                     });
                     break;
                 case TradingAccountTestCase.BuyWithFundedAccount:
@@ -98,7 +99,7 @@ namespace Marquito.CoinbasePro.Tests
 
                     try
                     {
-                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, Class.Enums.TradingSide.BUY);
+                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, TradingSide.BUY);
 
                         Assert.True(true);
                     }
@@ -112,7 +113,7 @@ namespace Marquito.CoinbasePro.Tests
                     fiatAccount = this.GetFundedAccount(false);
                     Assert.Throws<NoFundsAvailableException>(() =>
                     {
-                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, Class.Enums.TradingSide.BUY);
+                        this.CoinbaseProClient.CanBuyOrSell(cryptoAccount, fiatAccount, amountToTrade, TradingSide.BUY);
                     });
                     break;
                 default:

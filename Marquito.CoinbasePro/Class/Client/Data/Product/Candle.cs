@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System.Diagnostics;
+//using System.Diagnostics;
 
 namespace Marquito.CoinbasePro.Class.Client.Data.Product
 {
     /// <summary>
     /// A candle (represent a price at a specific instant)
     /// </summary>
-    [DebuggerDisplay("High = {High}, Low = {Low}, Open = {Open}, Close = {Close}, Volume = {Volume}, Start = {Start}")]
+    //[DebuggerDisplay("High = {High}, Low = {Low}, Open = {Open}, Close = {Close}, Volume = {Volume}, Start = {Start}")]
     public class Candle
     {
         /// <summary>

@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using System.Diagnostics;
+//using System.Diagnostics;
 
 namespace Marquito.CoinbasePro.Class.Client.Data.Product
 {
-    [DebuggerDisplay("Product ID = {ProductID}")]
+    //[DebuggerDisplay("Product ID = {ProductID}")]
     public class TradingProduct
     {
         [JsonProperty("product_id")]
