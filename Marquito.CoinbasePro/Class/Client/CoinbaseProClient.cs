@@ -27,9 +27,8 @@ namespace Marquito.CoinbasePro.Class.Client
         /// <param name="organizationName">The organization name</param>
         /// <param name="apiKey">The token</param>
         public CoinbaseProClient(string secretKey, string organizationName, string apiKey)
-            : base(secretKey, organizationName, apiKey)
+            : base("api.coinbase.com/api/v3/brokerage", secretKey, organizationName, apiKey)
         {
-            Endpoint = "api.coinbase.com/api/v3/brokerage";
             SecretKey = secretKey;
             OrganizationName = organizationName;
             ApiKey = apiKey;
@@ -40,7 +39,7 @@ namespace Marquito.CoinbasePro.Class.Client
         /// </summary>
         /// <param name="tradingConfiguration">The trading configuration</param>
         public CoinbaseProClient(TradingConfiguration tradingConfiguration)
-            : base(tradingConfiguration.SecretKey, tradingConfiguration.OrganizationName, tradingConfiguration.ApiKey)
+            : base("api.coinbase.com/api/v3/brokerage", tradingConfiguration)
         {
 
         }

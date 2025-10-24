@@ -16,17 +16,12 @@
 
   <ItemGroup>
     <PackageReference Include="Flurl.Http" Version="3.2.4" />
-    <PackageReference Include="jose-jwt" Version="5.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\MarquitoUtils.Main\MarquitoUtils.Main\MarquitoUtils.Main.csproj" />
     <ProjectReference Include="..\..\MarquitoUtils.TradingAPI\MarquitoUtils.TradingAPI\MarquitoUtils.TradingAPI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Class\Entities\" />
   </ItemGroup>
 
 </Project>
