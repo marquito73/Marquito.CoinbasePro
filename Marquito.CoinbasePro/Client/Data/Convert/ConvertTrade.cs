@@ -1,7 +1,7 @@
-﻿using Marquito.CoinbasePro.Class.Client.Data.Common;
+﻿using Marquito.CoinbasePro.Client.Data.Common;
 using Newtonsoft.Json;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Convert
+namespace Marquito.CoinbasePro.Client.Data.Convert
 {
     public class ConvertTrade
     {

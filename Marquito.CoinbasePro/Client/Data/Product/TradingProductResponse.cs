@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Product
+namespace Marquito.CoinbasePro.Client.Data.Product
 {
     public class TradingProductResponse
     {

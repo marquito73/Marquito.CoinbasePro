@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Common
+namespace Marquito.CoinbasePro.Client.Data.Common
 {
     public class Balance
     {

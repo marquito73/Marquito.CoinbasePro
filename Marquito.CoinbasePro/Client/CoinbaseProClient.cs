@@ -1,22 +1,22 @@
 ﻿using Flurl.Http;
 using Jose;
-using Marquito.CoinbasePro.Class.Client.Data.Account;
-using Marquito.CoinbasePro.Class.Client.Data.Order;
-using Marquito.CoinbasePro.Class.Client.Data.Permissions;
-using Marquito.CoinbasePro.Class.Client.Data.Product;
-using Marquito.CoinbasePro.Class.Enums.Extensions;
-using Marquito.CoinbasePro.Class.Exceptions;
-using MarquitoUtils.Main.Class.Enums.Http;
-using MarquitoUtils.Main.Class.Tools;
-using MarquitoUtils.TradingAPI.Class.Client;
-using MarquitoUtils.TradingAPI.Class.Entities.File;
-using MarquitoUtils.TradingAPI.Class.Enums;
+using Marquito.CoinbasePro.Client.Data.Account;
+using Marquito.CoinbasePro.Client.Data.Order;
+using Marquito.CoinbasePro.Client.Data.Permissions;
+using Marquito.CoinbasePro.Client.Data.Product;
+using Marquito.CoinbasePro.Enums.Extensions;
+using Marquito.CoinbasePro.Exceptions;
+using MarquitoUtils.Main.Currency.Tools;
+using MarquitoUtils.Main.Http.Enums;
+using MarquitoUtils.TradingAPI.Client;
+using MarquitoUtils.TradingAPI.Entities.File;
+using MarquitoUtils.TradingAPI.Enums;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 
-namespace Marquito.CoinbasePro.Class.Client
+namespace Marquito.CoinbasePro.Client
 {
     public class CoinbaseProClient : TradingClient
     {

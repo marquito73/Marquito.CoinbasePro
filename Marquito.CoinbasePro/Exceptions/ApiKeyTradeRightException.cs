@@ -1,12 +1,6 @@
-﻿using Marquito.CoinbasePro.Class.Client.Data.Account;
-using Marquito.CoinbasePro.Class.Client.Data.Permissions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Marquito.CoinbasePro.Client.Data.Permissions;
 
-namespace Marquito.CoinbasePro.Class.Exceptions
+namespace Marquito.CoinbasePro.Exceptions
 {
     public class ApiKeyTradeRightException : Exception
     {

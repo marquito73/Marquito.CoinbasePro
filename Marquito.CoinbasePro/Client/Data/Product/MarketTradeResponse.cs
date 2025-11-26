@@ -1,4 +1,4 @@
-﻿namespace Marquito.CoinbasePro.Class.Client.Data.Product
+﻿namespace Marquito.CoinbasePro.Client.Data.Product
 {
     /// <summary>
     /// The market trade response object

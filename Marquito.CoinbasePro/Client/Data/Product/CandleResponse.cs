@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Product
+namespace Marquito.CoinbasePro.Client.Data.Product
 {
     /// <summary>
     /// The candle response object

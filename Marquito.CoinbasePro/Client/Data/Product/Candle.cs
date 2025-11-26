@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 //using System.Diagnostics;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Product
+namespace Marquito.CoinbasePro.Client.Data.Product
 {
     /// <summary>
     /// A candle (represent a price at a specific instant)

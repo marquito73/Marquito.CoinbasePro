@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Order
+namespace Marquito.CoinbasePro.Client.Data.Order
 {
     public class Order
     {

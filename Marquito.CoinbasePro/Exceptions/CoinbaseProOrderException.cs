@@ -1,11 +1,11 @@
-﻿using Marquito.CoinbasePro.Class.Client.Data.Common;
-using MarquitoUtils.TradingAPI.Class.Enums;
+﻿using Marquito.CoinbasePro.Client.Data.Common;
+using MarquitoUtils.TradingAPI.Enums;
 
-namespace Marquito.CoinbasePro.Class.Exceptions
+namespace Marquito.CoinbasePro.Exceptions
 {
     public class CoinbaseProOrderException : Exception
     {
-        public CoinbaseProOrderException(string productID, TradingSide side, ErrorResponse error) 
+        public CoinbaseProOrderException(string productID, TradingSide side, ErrorResponse error)
             : base($"An exception occurs when trying to convert crypto : [{error.ErrorCode}] {error.ErrorMessage} - details : {error.ErrorDetails}")
         {
             this.Data.Add("ProductID", productID);

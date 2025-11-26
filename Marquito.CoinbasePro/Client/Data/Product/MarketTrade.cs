@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Product
+namespace Marquito.CoinbasePro.Client.Data.Product
 {
     /// <summary>
     /// A market trade (represent the current price of a product

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Permissions
+namespace Marquito.CoinbasePro.Client.Data.Permissions
 {
     public class AccountPermissions
     {

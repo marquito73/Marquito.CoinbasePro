@@ -1,7 +1,7 @@
-﻿using Marquito.CoinbasePro.Class.Client.Data.Common;
+﻿using Marquito.CoinbasePro.Client.Data.Common;
 using Newtonsoft.Json;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Order
+namespace Marquito.CoinbasePro.Client.Data.Order
 {
     /// <summary>
     /// Represents the response to an order request, including success status, order details, and error information.

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Account
+namespace Marquito.CoinbasePro.Client.Data.Account
 {
     public class AccountResponse
     {

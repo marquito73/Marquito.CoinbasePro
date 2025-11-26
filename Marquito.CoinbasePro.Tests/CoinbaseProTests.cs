@@ -1,11 +1,11 @@
-using Marquito.CoinbasePro.Class.Client;
-using Marquito.CoinbasePro.Class.Client.Data.Account;
-using Marquito.CoinbasePro.Class.Client.Data.Common;
-using Marquito.CoinbasePro.Class.Client.Data.Permissions;
-using Marquito.CoinbasePro.Class.Exceptions;
+using Marquito.CoinbasePro.Client;
+using Marquito.CoinbasePro.Client.Data.Account;
+using Marquito.CoinbasePro.Client.Data.Common;
+using Marquito.CoinbasePro.Client.Data.Permissions;
+using Marquito.CoinbasePro.Exceptions;
 using Marquito.CoinbasePro.Tests.Enums;
-using MarquitoUtils.TradingAPI.Class.Entities.File;
-using MarquitoUtils.TradingAPI.Class.Enums;
+using MarquitoUtils.TradingAPI.Entities.File;
+using MarquitoUtils.TradingAPI.Enums;
 using Moq;
 
 namespace Marquito.CoinbasePro.Tests

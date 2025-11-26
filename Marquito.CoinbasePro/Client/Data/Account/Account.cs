@@ -1,8 +1,8 @@
-﻿using Marquito.CoinbasePro.Class.Client.Data.Common;
+﻿using Marquito.CoinbasePro.Client.Data.Common;
 using Newtonsoft.Json;
 //using System.Diagnostics;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Account
+namespace Marquito.CoinbasePro.Client.Data.Account
 {
     //[DebuggerDisplay("AccountID = {AccountID}, Name = {Name}, Currency = {Currency}, AccountBalance = {AccountBalance.Value}")]
     public class Account

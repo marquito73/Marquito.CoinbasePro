@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 //using System.Diagnostics;
 
-namespace Marquito.CoinbasePro.Class.Client.Data.Product
+namespace Marquito.CoinbasePro.Client.Data.Product
 {
     //[DebuggerDisplay("Product ID = {ProductID}")]
     public class TradingProduct
