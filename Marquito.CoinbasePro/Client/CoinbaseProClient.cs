@@ -11,6 +11,7 @@ using MarquitoUtils.Main.Http.Enums;
 using MarquitoUtils.TradingAPI.Client;
 using MarquitoUtils.TradingAPI.Entities.File;
 using MarquitoUtils.TradingAPI.Enums;
+using MarquitoUtils.TradingAPI.Enums.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;

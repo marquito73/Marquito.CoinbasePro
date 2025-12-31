@@ -4,43 +4,6 @@ namespace Marquito.CoinbasePro.Enums.Extensions
 {
     public static class TradingPeriodExtensions
     {
-        public static int GetPeriodInSeconds(this TradingPeriod period)
-        {
-            int intPeriod;
-
-            switch (period)
-            {
-                case TradingPeriod.M1:
-                    intPeriod = 60;
-                    break;
-                case TradingPeriod.M5:
-                    intPeriod = 300;
-                    break;
-                case TradingPeriod.M15:
-                    intPeriod = 900;
-                    break;
-                case TradingPeriod.M30:
-                    intPeriod = 1800;
-                    break;
-                case TradingPeriod.H1:
-                    intPeriod = 3600;
-                    break;
-                case TradingPeriod.H2:
-                    intPeriod = 7200;
-                    break;
-                case TradingPeriod.H6:
-                    intPeriod = 21600;
-                    break;
-                case TradingPeriod.D1:
-                    intPeriod = 86400;
-                    break;
-                default:
-                    intPeriod = 60;
-                    break;
-            }
-
-            return intPeriod;
-        }
         public static string GetPeriodValue(this TradingPeriod period)
         {
             string periodValue;
