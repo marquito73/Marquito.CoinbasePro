@@ -5,7 +5,7 @@ using Marquito.CoinbasePro.Client.Data.Order;
 using Marquito.CoinbasePro.Client.Data.Permissions;
 using Marquito.CoinbasePro.Client.Data.Product;
 using Marquito.CoinbasePro.Enums.Extensions;
-using Marquito.CoinbasePro.Exceptions;
+using Marquito.TradingBotUtils.Order.Exceptions;
 using MarquitoUtils.Main.Currency.Tools;
 using MarquitoUtils.Main.Http.Enums;
 using MarquitoUtils.TradingAPI.Client;
@@ -353,15 +353,15 @@ namespace Marquito.CoinbasePro.Client
             AccountPermissions accountPermissions = GetAccountPermissions();
             if (!accountPermissions.CanTrade)
             {
-                throw new ApiKeyTradeRightException(accountPermissions);
+                throw new ApiKeyTradeRightException();
             }
             if (side == TradingSide.SELL && fromAccount.AccountBalance.Value < amountToConvert)
             {
-                throw new NoFundsAvailableException(fromAccount, $"{fromAccount.Currency}-{targetAccount.Currency}", side);
+                throw new NoFundsAvailableException(fromAccount.AccountID, fromAccount.Currency, $"{fromAccount.Currency}-{targetAccount.Currency}", side);
             }
             else if (side == TradingSide.BUY && targetAccount.AccountBalance.Value < amountToConvert)
             {
-                throw new NoFundsAvailableException(targetAccount, $"{fromAccount.Currency}-{targetAccount.Currency}", side);
+                throw new NoFundsAvailableException(targetAccount.AccountID, targetAccount.Currency, $"{fromAccount.Currency}-{targetAccount.Currency}", side);
             }
         }
 
@@ -426,7 +426,7 @@ namespace Marquito.CoinbasePro.Client
             if (!orderResponse.IsSuccess)
             {
                 // Order failed, throw an exception with the error details
-                throw new CoinbaseProOrderException($"{fromAccount.Currency}-{targetAccount.Currency}", side, orderResponse.Error);
+                throw new OrderException($"{fromAccount.Currency}-{targetAccount.Currency}", side, orderResponse.Error);
             }
             else
             {
